@@ -11,9 +11,13 @@ Your personal LLM assistant running 100% on your local machine
 ### Project information
 - Supported OS: `MacOS`, `Windows`, `Ubuntu`
 - Build with: `Nuitka`,
-- Tech stack: `python`, `fastapi`, `nextjs`, `langchain`, `crewai`, `huggingface`, `gemini`, `docker`
+- Tech stack: `python`, `fastapi`, `pyqt`, `langchain`, `crewai`, `huggingface`, `gemini`, `docker`
 
 ## Development
+Clone repository with submodules:
+```bash
+git clone --recurse-submodules https://github.com/duongnguyen-dev/llmbuddy.git
+```
 Install required dependencies:
 ```bash
 conda create -n llmbuddy python==3.10
