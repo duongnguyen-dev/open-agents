@@ -16,6 +16,6 @@ Your personal LLM assistant running 100% on your local machine
 ## Development
 Install required dependencies:
 ```bash
-conda create -n llmbuddy python==3.9
+conda create -n llmbuddy python==3.10
 pip install -r requirements.txt
 ```
