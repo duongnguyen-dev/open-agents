@@ -2,62 +2,62 @@ import streamlit as st
 
 # ===== Constants =====
 SUPPORTED_FILE_TYPES = ["pdf", "docx", "txt"]
-DEFAULT_MODELS = ["BERT", "GPT-4", "RAG"]
-DEFAULT_FEATURES = ["Tra cứu điều luật", "Tóm tắt văn bản", "Giải thích quy định"]
-USER_ROLE = "user"
-BOT_ROLE = "bot"
+AVAILABLE_MODELS = ["BERT", "GPT-4", "RAG"]
+AVAILABLE_FEATURES = ["Legal Lookup", "Document Summarization", "Law Explanation"]
+USER = "user"
+BOT = "bot"
 
-# ===== Sidebar: Model + Feature Selection =====
-def render_sidebar_options():
-    st.sidebar.header("⚙️ Tùy chọn")
-    
-    selected_model = st.sidebar.selectbox("🔍 Chọn mô hình:", DEFAULT_MODELS)
-    selected_feature = st.sidebar.selectbox("🛠️ Chọn tính năng:", DEFAULT_FEATURES)
-    uploaded_file = st.sidebar.file_uploader(
-        "📄 Tải lên file văn bản luật", type=SUPPORTED_FILE_TYPES
+# ===== Sidebar Section =====
+def render_sidebar_controls():
+    st.sidebar.header("⚙️ Settings")
+
+    selected_model = st.sidebar.selectbox("🔍 Select Model:", AVAILABLE_MODELS)
+    selected_feature = st.sidebar.selectbox("🛠️ Select Feature:", AVAILABLE_FEATURES)
+    uploaded_document = st.sidebar.file_uploader(
+        "📄 Upload Legal Document", type=SUPPORTED_FILE_TYPES
     )
-    
-    return selected_model, selected_feature, uploaded_file
 
-# ===== State Initialization =====
-def initialize_chat_history():
+    return selected_model, selected_feature, uploaded_document
+
+# ===== Chat History Initialization =====
+def initialize_chat_session():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
 # ===== Display Chat Messages =====
-def display_chat_history():
-    st.subheader("💬 Khung Chat")
-    for sender_role, message_text in st.session_state.chat_history:
-        sender_name = "🧑 Bạn" if sender_role == USER_ROLE else "🤖 Bot"
-        st.markdown(f"**{sender_name}:** {message_text}")
+def render_chat_history():
+    st.subheader("💬 Chat Window")
+    for sender, message in st.session_state.chat_history:
+        sender_label = "🧑 You" if sender == USER else "🤖 Bot"
+        st.markdown(f"**{sender_label}:** {message}")
 
-# ===== Generate Bot Response (Placeholder) =====
-def generate_mock_response(model_name: str, feature_name: str) -> str:
-    return f"(🔁 Trả lời giả lập từ {model_name} cho chức năng {feature_name})"
+# ===== Simulated Bot Response (Placeholder) =====
+def get_mock_response(model: str, feature: str) -> str:
+    return f"(🔁 Simulated response from {model} using feature: {feature})"
 
-# ===== Handle Message Submission =====
-def handle_message_submission(user_message: str, model: str, feature: str):
-    if not user_message.strip():
+# ===== Process User Message =====
+def process_user_message(message: str, model: str, feature: str):
+    if not message.strip():
         return
-    
-    st.session_state.chat_history.append((USER_ROLE, user_message))
-    bot_response = generate_mock_response(model, feature)
-    st.session_state.chat_history.append((BOT_ROLE, bot_response))
-    st.experimental_rerun()  # Rerun to refresh chat display
+
+    st.session_state.chat_history.append((USER, message))
+    bot_reply = get_mock_response(model, feature)
+    st.session_state.chat_history.append((BOT, bot_reply))
+    st.experimental_rerun()
 
 # ===== Main App =====
 def main():
-    st.title("📚 Chatbot Luật - Giao diện Demo")
+    st.title("📚 Legal Chatbot - Demo Interface")
 
-    selected_model, selected_feature, uploaded_file = render_sidebar_options()
-    initialize_chat_history()
-    display_chat_history()
+    selected_model, selected_feature, uploaded_file = render_sidebar_controls()
+    initialize_chat_session()
+    render_chat_history()
 
-    user_input = st.text_input("Nhập câu hỏi hoặc điều luật bạn muốn hỏi:")
-    send_button_clicked = st.button("📨 Gửi")
+    user_query = st.text_input("Enter your legal question:")
+    is_submit_clicked = st.button("📨 Send")
 
-    if send_button_clicked:
-        handle_message_submission(user_input, selected_model, selected_feature)
+    if is_submit_clicked:
+        process_user_message(user_query, selected_model, selected_feature)
 
 # ===== Entry Point =====
 if __name__ == "__main__":
