@@ -1,7 +1,14 @@
-fastapi==0.115.12
+fastapi==0.115.0
 langchain==0.3.25
+pydantic==2.11.4
+zstandard==0.23.0
 fastapi-mcp==0.3.3
 crewai==0.118.0
 huggingface_hub==0.30.2
 pytest==8.3.5
 loguru==0.7.3
+transformers==4.51.3
+torch==2.7.0 
+langchain-huggingface==0.1.2
+langchain-ollama==0.3.2
+streamlit==1.45.0

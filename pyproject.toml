@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llmbuddy"
+version = "0.1.0"
+description = "Your personal LLM assistant running 100% on your local machine"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "Nguyen Hai Duong", email = "duongng2911@gmail.com"}
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools]
+packages = ["llmbuddy"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[project.urls]
+Homepage = "https://github.com/duongnguyen-dev/llmbuddy"

@@ -1,17 +1,13 @@
 import streamlit as st
-
-# ===== Constants =====
-SUPPORTED_FILE_TYPES = ["pdf", "docx", "txt"]
-DEFAULT_MODELS = ["BERT", "GPT-4", "RAG"]
-DEFAULT_FEATURES = ["Tra cứu điều luật", "Tóm tắt văn bản", "Giải thích quy định"]
-USER_ROLE = "user"
-BOT_ROLE = "bot"
+import httpx
+import requests
+from configs import *
 
 # ===== Sidebar: Model + Feature Selection =====
 def render_sidebar_options():
     st.sidebar.header("⚙️ Tùy chọn")
     
-    selected_model = st.sidebar.selectbox("🔍 Chọn mô hình:", DEFAULT_MODELS)
+    selected_model = st.sidebar.selectbox("🔍 Chọn mô hình:", EMBEDDING_MODELS)
     selected_feature = st.sidebar.selectbox("🛠️ Chọn tính năng:", DEFAULT_FEATURES)
     uploaded_file = st.sidebar.file_uploader(
         "📄 Tải lên file văn bản luật", type=SUPPORTED_FILE_TYPES
@@ -45,6 +41,13 @@ def handle_message_submission(user_message: str, model: str, feature: str):
     st.session_state.chat_history.append((BOT_ROLE, bot_response))
     st.experimental_rerun()  # Rerun to refresh chat display
 
+async def fetch_stream(message: str):
+    async with httpx.AsyncClient() as client:
+        async with client.stream("POST", "http://127.0.0.1:8001/chat/generate", json={'user_input': message}) as response:
+            async for line in response.aiter_lines():
+                if line:
+                    yield line
+
 # ===== Main App =====
 def main():
     st.title("📚 Chatbot Luật - Giao diện Demo")
@@ -57,8 +60,19 @@ def main():
     send_button_clicked = st.button("📨 Gửi")
 
     if send_button_clicked:
-        handle_message_submission(user_input, selected_model, selected_feature)
+        payload = {"user_input": user_input}
+        response_container = st.empty()
+        response_text = ""
 
+        with requests.post('http://127.0.0.1:8001/chat/generate', json=payload, stream=True) as response:
+            if response.status_code == 200:
+                print(response.content)
+                for chunk in response.iter_content(chunk_size=1):
+                    if chunk:
+                        token = chunk.decode('utf-8')
+                        response_text += token
+                        response_container.markdown(response_text)
+                        
 # ===== Entry Point =====
 if __name__ == "__main__":
     main()
