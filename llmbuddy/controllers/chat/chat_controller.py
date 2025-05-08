@@ -13,8 +13,8 @@ def generate(chat_request: ChatModel, request: Request):
         raise HTTPException(status_code=400, detail="Message cannot be empty")
     
     print(request.app.state.model['llm'])
-    def token_generator():
-        for token in request.app.state.model['llm'].generate_text(user_input):
+    async def token_generator():
+        async for token in request.app.state.model['llm'].generate_text(user_input):
             yield token
 
     return StreamingResponse(token_generator(), media_type="text/plain")

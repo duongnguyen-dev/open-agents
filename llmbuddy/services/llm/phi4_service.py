@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from loguru import logger
-from langchain_huggingface import HuggingFaceEndpoint
 from langchain_huggingface.llms import HuggingFacePipeline
 from langchain_core.prompts import PromptTemplate
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
@@ -35,9 +34,8 @@ class Phi4Service(LLMService):
             self.hf = HuggingFacePipeline(pipeline=self.pipeline)
         else:
             logger.error("We haven't support local model yet!")
-            self.llm = None
         
-    def generate_text(self, question: str):
+    async def generate_text(self, question: str):
         template = """Question: {question}
         Answer: Let's think step by step."""
         
@@ -45,7 +43,7 @@ class Phi4Service(LLMService):
 
         chain = prompt | self.hf 
         
-        for chunk in chain.stream(question):
+        async for chunk in chain.astream(question):
             yield chunk
         
         

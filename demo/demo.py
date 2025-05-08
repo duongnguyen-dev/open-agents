@@ -27,32 +27,11 @@ def render_chat_history():
         sender_label = "🧑 You" if sender == USER_ROLE else "🤖 bot"
         st.markdown(f"**{sender_label}:** {message}")
 
-# ===== Simulated Bot Response (Placeholder) =====
-def get_mock_response(model: str, feature: str) -> str:
-    return f"(🔁 Simulated response from {model} using feature: {feature})"
-
-# ===== Process User Message =====
-# def process_user_message(message: str, model: str, feature: str):
-#     if not message.strip():
-#         return
-    
-#     st.session_state.chat_history.append((USER_ROLE, message))
-#     bot_response = generate_mock_response(model, feature)
-#     st.session_state.chat_history.append((BOT_ROLE, bot_response))
-#     st.experimental_rerun()  # Rerun to refresh chat display
-
-# async def fetch_stream(message: str):
-#     async with httpx.AsyncClient() as client:
-#         async with client.stream("POST", "http://127.0.0.1:8001/chat/generate", json={'user_input': message}) as response:
-#             async for line in response.aiter_lines():
-#                 if line:
-#                     yield line
-
 # ===== Main App =====
 def main():
     st.title("📚 Legal Chatbot - Demo Interface")
 
-    # selected_model, selected_feature, uploaded_file = render_sidebar_controls()
+    selected_model, selected_feature, uploaded_file = render_sidebar_options()
     initialize_chat_session()
     render_chat_history()
 
@@ -66,11 +45,12 @@ def main():
                 json={"user_input": user_input},
                 stream=True
             )
-            print(response)
+
             if response.status_code == 200:
                 full_response = ""
                 placeholder = st.empty()
-                for chunk in response.iter_content(chunk_size=1024):
+                for chunk in response.iter_content():
+                    print(chunk)
                     if chunk:
                         text_chunk = chunk.decode("utf-8")
                         full_response += text_chunk
