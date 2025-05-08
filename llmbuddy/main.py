@@ -1,12 +1,15 @@
 from contextlib import asynccontextmanager
+from loguru import logger
 from fastapi import FastAPI
 from llmbuddy.controllers.llm.llm_controller import router as llm_router
 from llmbuddy.controllers.chat.chat_controller import router as chat_router
+from llmbuddy.services.llm.phi4_service import Phi4Service
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.model = {} 
-    app.state.model['llm'] = None
+    app.state.model['llm'] = Phi4Service(model_path=None)
+    logger.info("Load model successfully")
     yield
     app.state.model.clear()
 
