@@ -3,14 +3,33 @@ import httpx
 import requests
 from configs import *
 
+def process_uploaded_file():
+    uploaded_file = st.session_state["uploaded_file"]
+    if uploaded_file is not None:
+        file_bytes = uploaded_file.getvalue()
+        
+        response = requests.post(
+            "http://127.0.0.1:8002/document/extract_document",
+            files={"file": (uploaded_file.name, file_bytes, uploaded_file.type)},
+        )
+        if response.status_code == 200:
+            st.success("Tệp đã được xử lý thành công!")
+            result = response.json().get("extracted_result", "")
+            print(result)
+        else:
+            st.error("Đã xảy ra lỗi khi xử lý tệp.")
+
+
 # ===== Sidebar: Model + Feature Selection =====
 def render_sidebar_options():
-    st.sidebar.header("⚙️ Tùy chọn")
+    st.sidebar.header("⚙️ Settings")
     
-    selected_model = st.sidebar.selectbox("🔍 Chọn mô hình:", EMBEDDING_MODELS)
-    selected_feature = st.sidebar.selectbox("🛠️ Chọn tính năng:", DEFAULT_FEATURES)
+    selected_model = st.sidebar.selectbox("🔍 Select LLM model:", LLM_MODELS)
+    selected_feature = st.sidebar.selectbox("🛠️ Select Feature:", DEFAULT_FEATURES)
     uploaded_file = st.sidebar.file_uploader(
-        "📄 Tải lên file văn bản luật", type=SUPPORTED_FILE_TYPES
+        "📄 Upload document", type=SUPPORTED_FILE_TYPES,
+        key="uploaded_file",
+        on_change=process_uploaded_file
     )
     
     return selected_model, selected_feature, uploaded_file
