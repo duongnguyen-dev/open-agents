@@ -19,8 +19,6 @@ def process_uploaded_file():
         else:
             st.error("Đã xảy ra lỗi khi xử lý tệp.")
 
-
-# ===== Sidebar: Model + Feature Selection =====
 def render_sidebar_options():
     st.sidebar.header("⚙️ Settings")
     
@@ -34,12 +32,10 @@ def render_sidebar_options():
     
     return selected_model, selected_feature, uploaded_file
 
-# ===== Chat History Initialization =====
 def initialize_chat_session():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
-# ===== Display Chat Messages =====
 def render_chat_history():
     st.subheader("💬 Chat Window")
     for sender, message in st.session_state.chat_history:
@@ -60,7 +56,7 @@ def main():
     if send_button_clicked:
         with st.spinner("Generating response..."):
             response = requests.post(
-                "http://127.0.0.1:8002//chat/generate",
+                "http://127.0.0.1:8002/chat/chat_with_multi_agent",
                 json={"user_input": user_input},
                 stream=True
             )

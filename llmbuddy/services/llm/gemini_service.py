@@ -23,3 +23,6 @@ class GeminiService(LLMService):
     async def generate_text(self, question: str):
         async for chunk in self.llm.astream(question):
             yield chunk.content
+            
+    def bind_tools(self, tools):
+        return self.llm.bind_tools(tools)

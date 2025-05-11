@@ -1,10 +1,17 @@
 # ===== Constants =====
-SUPPORTED_FILE_TYPES = ["pdf", "docx", "txt"]
-# EMBEDDING_MODELS = ["BERT", "GPT-4", "RAG"]
+SUPPORTED_FILE_TYPES = ["pdf"]
 LLM_MODELS = [
+    "gemini-2.0-flash",
     "microsoft/Phi-4-mini-reasoning", 
-    "gemini-2.0-flash", 
+    "microsoft/bitnet-b1.58-2B-4T" 
 ]
-DEFAULT_FEATURES = ["Tra cứu điều luật", "Tóm tắt văn bản", "Q&A"]
+DEFAULT_FEATURES = [
+    "Q&A",
+    "Finetuning",
+    "OCR",
+    "Chat with Database",
+    "AI Agent",
+    "Multi AI Agent"
+]
 USER_ROLE = "user"
 BOT_ROLE = "bot"
