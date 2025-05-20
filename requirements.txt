@@ -4,8 +4,9 @@ aiosqlite==0.21.0
 langchain-huggingface==0.1.2
 langchain-ollama==0.3.2
 langchain-google-genai==2.0.9
-langchain-tavily==0.1.6
+# langchain-tavily==0.1.6
 langgraph==0.4.3
 langgraph-supervisor==0.0.21
 langsmith==0.3.42
 python-dotenv==1.1.0
+protobuf>=5.0,<6.0
