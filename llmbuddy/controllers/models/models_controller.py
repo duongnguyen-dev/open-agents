@@ -15,4 +15,7 @@ def load_llm(chat_request: LLMModel, request: Request):
         request.app.state.model['llm'] = GeminiService(model_name=chat_request.llm_name)
         return {"response" : "Model loaded successfully!"}
     return {"response": "Model was not fully loaded!"}
+
+@router.post("/")
+def list_models():
     

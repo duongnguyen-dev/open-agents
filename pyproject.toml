@@ -18,7 +18,6 @@ dynamic = ["dependencies"]
 packages = ["llmbuddy"]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
 Homepage = "https://github.com/duongnguyen-dev/llmbuddy"
