@@ -8,36 +8,28 @@ from llmbuddy.controllers.documents.documents_controller import router as docume
 from llmbuddy.services.llm.gemini_service import GeminiService
 from llmbuddy.services.agent.supervisor_agent import SupervisorAgent
 from llmbuddy.services.agent.weather_agent import WeatherAgent
-from llmbuddy.databases.models import Base, engine
-# from llmbuddy.services.agent.web_agent import WebAgent
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.model = {}
-    app.state.model['llm'] = GeminiService(model_name="gemini-2.0-flash")
+    # Init LLM
+    app.state.var = {}
+    app.state.var['llm'] = GeminiService(model_name="gemini-2.0-flash")
     try:
-        app.state.model['agent'] = SupervisorAgent(
-            model=app.state.model['llm'],
+        app.state.var['agent'] = SupervisorAgent(
+            model=app.state.var['llm'],
             agents=[
-                WeatherAgent(app.state.model['llm'])(), 
-                # WebAgent(app.state.model['llm'])()
+                WeatherAgent(app.state.var['llm'])(), 
             ]
         )
         logger.info("Load model successfully!")
     except: 
         logger.error("Unable to load model!")
-        
-
-    async with engine.begin() as conn:
-        app.state.conn = await conn.run_sync(Base.metadata.create_all)
-    logger.info("Load database successfully!")
-    # except:
-    #     logger.error("Unable to load database!")
-
+    
     yield
-    app.state.model.clear()
+    app.state.var.clear()
 
 app = FastAPI(lifespan=lifespan)
+
 app.include_router(models_router, prefix="/models", tags=["models"])
 app.include_router(chat_router, prefix="/chat", tags=["chat"])
 app.include_router(document_router, prefix="/document", tags=["document"])

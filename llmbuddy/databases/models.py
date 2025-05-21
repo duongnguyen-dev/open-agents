@@ -1,19 +1,9 @@
 from __future__ import annotations
 from typing import List, Optional
 from datetime import datetime, UTC, timedelta
-from sqlalchemy import Column, DateTime, ForeignKey, Table
-from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase, sessionmaker
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from llmbuddy.configs import SQLALCHEMY_DATABASE_URL
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase
 from llmbuddy.databases.types import ModelType, TeamArchitecture
-
-engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL,
-)
-
-async_session = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False
-)
 
 class Base(DeclarativeBase):
     pass
@@ -42,7 +32,7 @@ class Models(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
     updated_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC), onupdate=datetime.now(UTC))
 
-    agents: Mapped[List["Agents"]] = relationship(back_populates="models")
+    agents: Mapped[Optional[List["Agents"]]] = relationship(back_populates="models")
 
 class Tools(Base):
     __tablename__ = "tools"

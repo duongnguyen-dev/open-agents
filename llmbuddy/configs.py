@@ -1,1 +1,1 @@
-SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///data/llmbuddy.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///data/llmbuddy.db"

@@ -9,4 +9,5 @@ langgraph==0.4.3
 langgraph-supervisor==0.0.21
 langsmith==0.3.42
 python-dotenv==1.1.0
+sqlmodel==0.0.24
 protobuf>=5.0,<6.0
