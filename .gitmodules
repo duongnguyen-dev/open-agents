@@ -1,6 +1,0 @@
-[submodule "libs/llama.cpp"]
-	path = libs/llama.cpp
-	url = https://github.com/ggml-org/llama.cpp
-[submodule "libs/BitNet"]
-	path = libs/BitNet
-	url = https://github.com/microsoft/BitNet
